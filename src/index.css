@@ -1,0 +1,180 @@
+@import 'tailwindcss';
+
+/*
+ * DESIGN TOKENS
+ * Change a color or font here and it updates everywhere.
+ * Tailwind turns each token into classes, e.g. --color-ink → text-ink, bg-ink, border-ink.
+ */
+@theme {
+  --color-bg: #0b0b0c;
+  --color-surface: #111113;
+  --color-raised: #18181b;
+  --color-line: #26262a;
+  --color-line-strong: #3a3a40;
+  --color-ink: #edede9;
+  --color-ink-2: #b8b8b2;
+  --color-muted: #8c8c86;
+  /* The algorithm's color. Used sparingly: it marks the machine's voice. */
+  --color-signal: #ff6a3d;
+  /* The human's color: everything the player does. */
+  --color-human: #7aa7ff;
+  /* Chart series for option A / option B (validated for color-vision deficiency on the dark surface). */
+  --color-opt-a: #de5a30;
+  --color-opt-b: #4f86e8;
+
+  --font-display: 'Inter Tight', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --animate-enter: enter 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-fade: fade 0.5s ease both;
+  --animate-reveal: reveal 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-blink: blink 1.4s steps(2, start) infinite;
+  --animate-pop: pop 0.55s cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
+  --animate-scan: scan 1.1s ease-in-out infinite;
+  --animate-shake: shake 0.45s ease both;
+  --animate-lock: lock 0.5s ease both;
+
+  @keyframes enter {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(8px) scale(0.985); filter: blur(4px); }
+    to { opacity: 1; transform: none; filter: none; }
+  }
+  @keyframes blink {
+    to { visibility: hidden; }
+  }
+  @keyframes pop {
+    0% { opacity: 0; transform: scale(0.86); }
+    60% { opacity: 1; transform: scale(1.03); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes scan {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(250%); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-3px); }
+  }
+  @keyframes lock {
+    0% { box-shadow: 0 0 0 0 rgb(255 106 61 / 0.55); }
+    100% { box-shadow: 0 0 0 14px rgb(255 106 61 / 0); }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-bg);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: 'ss01', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-bg);
+  }
+  /* Clear, consistent keyboard focus everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* Small uppercase monospace label, the "lab notebook" voice of the UI. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .display {
+    font-family: var(--font-display);
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+    font-weight: 600;
+  }
+  .container-page {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-page { padding-inline: 1.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .container-page { padding-inline: 2.5rem; }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 3rem;
+    padding: 0 1.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid var(--color-line-strong);
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--color-ink);
+    color: var(--color-bg);
+    border-color: var(--color-ink);
+  }
+  .btn-primary:hover { background: #ffffff; }
+  .btn-ghost { color: var(--color-ink); }
+  .btn-ghost:hover { border-color: var(--color-ink); }
+
+  /* Hairline grid background used on a few panels. */
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .tabular { font-variant-numeric: tabular-nums; }
+}
+
+/* Respect users who prefer less motion. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Homepage tree: leaves drift a couple of pixels so the diagram feels alive. */
+.tree-drift {
+  animation: drift 7s ease-in-out infinite alternate;
+  transform-box: fill-box;
+}
+@keyframes drift {
+  from { transform: translate(0, -2px); }
+  to { transform: translate(3px, 2px); }
+}
